@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
       - name: api-container
-      image: opsta-api:v1
-      ports:
+        image: opsta-api:v1
+        imagePullPolicy: Never #ไม่ให้มัน Pull จากในเน็ต ให้ Pull จากในเครื่อง
+        ports:
         - containerPort: 8080
