@@ -1,0 +1,24 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+build_job:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker build -t $DOCKER_IMAGE .
+    - docker push $DOCKER_IMAGE
+
+deploy_job:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f deployment.yaml
+    - kubectl set image deployment/api-deployment api-container=$DOCKER_IMAGE
+    - kubectl rollout status deployment/api-deployment
