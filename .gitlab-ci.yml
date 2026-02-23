@@ -17,7 +17,9 @@ build_job:
 
 deploy_job:
   stage: deploy
-  image: bitnami/kubectl:latest
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
   script:
     - kubectl apply -f /k8s
     - kubectl set image deployment/api-deploy api-container=$IMAGE_TAG
