@@ -19,6 +19,6 @@ deploy_job:
   stage: deploy
   image: bitnami/kubectl:latest
   script:
-    - kubectl apply -f deployment.yaml
+    - kubectl apply -f /k8s
     - kubectl set image deployment/api-deployment api-container=$DOCKER_IMAGE
     - kubectl rollout status deployment/api-deployment
